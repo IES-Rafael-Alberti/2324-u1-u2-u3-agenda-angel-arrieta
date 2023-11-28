@@ -40,37 +40,50 @@ NOMBRE_FICHERO = 'contactos.csv'
 RUTA_FICHERO = path.join(RUTA, NOMBRE_FICHERO)
 
 #TODO: Crear un conjunto con las posibles opciones del menú de la agenda
-OPCIONES_MENU = ?
+OPCIONES_MENU = {}
 #TODO: Utiliza este conjunto en las funciones agenda() y pedir_opcion()
 
 
 def borrar_consola():
-    """ Limpia la consola
-    """
+    """ Limpia la consola """
     if os.name == "posix":
         os.system ("clear")
     elif os.name == "ce" or os.name == "nt" or os.name == "dos":
         os.system ("cls")
 
 
-def cargar_contactos(contactos: list):
-    """ Carga los contactos iniciales de la agenda desde un fichero
-    ...
+def cargar_contactos() -> list:
     """
-    #TODO: Controlar los posibles problemas derivados del uso de ficheros...
-
+    Carga los contactos iniciales de la agenda desde un fichero
+    -----------------
+    :return: Lista con cada contacto como diccionario
+    """
+    contactos = list()
     with open(RUTA_FICHERO, 'r') as fichero:
         for linea in fichero:
-            print(linea)
+            contacto = dict()
+            campos = linea.split(";")
+            for i in range(len(campos)):
+                if "\n" in campos[i]:
+                    campos[i] = campos[i][:-1]
+            contacto.update({'nombre': campos[0], 'apellido': campos[1], 'correo': campos[2]})
+            if len(campos) > 3:
+                telefono_s = list()
+                for i in range(3, len(campos)):
+                    telefono_s.append(campos[i])
+                contacto.update({'telefonos': telefono_s})
+            contactos.append(contacto)
+    return contactos
 
 
 def eliminar_contacto(contactos: list, email: str):
     """ Elimina un contacto de la agenda
     ...
     """
-    try:
+    "try:"
+    ""
         #TODO: Crear función buscar_contacto para recuperar la posición de un contacto con un email determinado...
-
+    """
         if pos != None:
             del contactos[pos]
             print("Se eliminó 1 contacto")
@@ -79,6 +92,7 @@ def eliminar_contacto(contactos: list, email: str):
     except Exception as e:
         print(f"**Error** {e}")
         print("No se eliminó ningún contacto")
+    """
 
 
 def agenda(contactos: list):
@@ -86,13 +100,14 @@ def agenda(contactos: list):
     ...
     """
     #TODO: Crear un bucle para mostrar el menú y ejecutar las funciones necesarias según la opción seleccionada...
-
+    """
     while opcion != 7:
         mostrar_menu()
         opcion = pedir_opcion()
 
         #TODO: Se valorará que utilices la diferencia simétrica de conjuntos para comprobar que la opción es un número entero del 1 al 6
         if opcion in ?:
+    """
 
 
 def pulse_tecla_para_continuar():
@@ -107,12 +122,12 @@ def main():
     """
     borrar_consola()
 
-    #TODO: Asignar una estructura de datos vacía para trabajar con la agenda...
-    contactos = ?
-
     #TODO: Modificar la función cargar_contactos para que almacene todos los contactos del fichero en una lista con un diccionario por contacto (claves: nombre, apellido, email y telefonos)
+    contactos = cargar_contactos()
+    for contacto in contactos:
+        print(contacto)
     #TODO: Realizar una llamada a la función cargar_contacto con todo lo necesario para que funcione correctamente.
-    cargar_contactos(?)
+
 
     #TODO: Crear función para agregar un contacto. Debes tener en cuenta lo siguiente:
     # - El nombre y apellido no pueden ser una cadena vacía o solo espacios y se guardarán con la primera letra mayúscula y el resto minúsculas (ojo a los nombre compuestos)
@@ -125,16 +140,20 @@ def main():
     # - De igual manera, aunque existan espacios entre el prefijo y los 9 números al introducirlo, debe almacenarse sin espacios.
     # - Por ejemplo, será posible introducir el número +34 600 100 100, pero guardará +34600100100 y cuando se muestren los contactos, el telófono se mostrará como +34-600100100. 
     #TODO: Realizar una llamada a la función agregar_contacto con todo lo necesario para que funcione correctamente.
-    agregar_contacto(?)
+    """
+    agregar_contacto()
 
     pulse_tecla_para_continuar()
     borrar_consola()
+    """
 
     #TODO: Realizar una llamada a la función eliminar_contacto con todo lo necesario para que funcione correctamente, eliminando el contacto con el email rciruelo@gmail.com
-    eliminar_contacto(?)
+    """
+    eliminar_contacto()
 
     pulse_tecla_para_continuar()
     borrar_consola()
+    """
 
     #TODO: Crear función mostrar_contactos para que muestre todos los contactos de la agenda con el siguiente formato:
     # ** IMPORTANTE: debe mostrarlos ordenados según el nombre, pero no modificar la lista de contactos de la agenda original **
@@ -153,10 +172,12 @@ def main():
     # ** resto de contactos **
     #
     #TODO: Realizar una llamada a la función mostrar_contactos con todo lo necesario para que funcione correctamente.
+    """
     mostrar_contactos(?)
 
     pulse_tecla_para_continuar()
     borrar_consola()
+    """
 
     #TODO: Crear un menú para gestionar la agenda con las funciones previamente desarrolladas y las nuevas que necesitéis:
     # AGENDA
@@ -174,7 +195,7 @@ def main():
     #
     #TODO: Para la opción 2, modificar un contacto, deberás desarrollar las funciones necesarias para actualizar la información de un contacto.
     #TODO: También deberás desarrollar la opción 6 que deberá preguntar por el criterio de búsqueda (nombre, apellido, email o telefono) y el valor a buscar para mostrar los contactos que encuentre en la agenda.
-    agenda(?)
+    "agenda()"
 
 
 if __name__ == "__main__":
