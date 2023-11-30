@@ -3,7 +3,7 @@ from os import path
 import pathlib
 import pytest
 
-from ExamenU3.agenda_solucion_doc import(
+from src.agenda import (
     cargar_contactos,
     validar_email,
     pedir_email,
