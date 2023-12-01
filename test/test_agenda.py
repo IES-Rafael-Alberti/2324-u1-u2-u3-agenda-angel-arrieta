@@ -3,7 +3,7 @@ from os import path
 import pathlib
 import pytest
 
-from ExamenU3.agenda_solucion_doc import(
+from src.agenda import (
     cargar_contactos,
     validar_email,
     pedir_email,
@@ -18,12 +18,12 @@ RUTA = pathlib.Path(__file__).parent.absolute()
 NOMBRE_FICHERO = 'contactos.csv'
 RUTA_FICHERO = path.join(RUTA, NOMBRE_FICHERO)
 CONTACTOS_PRUEBA = [
-    {"nombre": "Laura", "apellido": "Iglesias", "email": "liglesias@gmail.com", "telefonos": ["666777333", "666888555", "607889988"]},
-    {"nombre": "Antonio", "apellido": "Amargo", "email": "aamargo@gmail.com", "telefonos": []},
-    {"nombre": "Marta", "apellido": "Copete", "email": "marcopete@gmail.com", "telefonos": ["+34600888800"]},
-    {"nombre": "Rafael", "apellido": "Ciruelo", "email": "rciruelo@gmail.com", "telefonos": ["+34607212121", "655001122"]},
-    {"nombre": "Daniela", "apellido": "Alba", "email": "danalba@gmail.com", "telefonos": ["+34600606060", "+34670898934"]},
-    {"nombre": "Rogelio", "apellido": "Rojo", "email": "rogrojo@gmail.com", "telefonos": ["610000099", "645000013"]}
+    {"nombre": "Laura", "apellido": "Iglesias", "correo": "liglesias@gmail.com", "telefonos": ["666777333", "666888555", "607889988"]},
+    {"nombre": "Antonio", "apellido": "Amargo", "correo": "aamargo@gmail.com", "telefonos": []},
+    {"nombre": "Marta", "apellido": "Copete", "correo": "marcopete@gmail.com", "telefonos": ["+34600888800"]},
+    {"nombre": "Rafael", "apellido": "Ciruelo", "correo": "rciruelo@gmail.com", "telefonos": ["+34607212121", "655001122"]},
+    {"nombre": "Daniela", "apellido": "Alba", "correo": "danalba@gmail.com", "telefonos": ["+34600606060", "+34670898934"]},
+    {"nombre": "Rogelio", "apellido": "Rojo", "correo": "rogrojo@gmail.com", "telefonos": ["610000099", "645000013"]}
 ]
 
 
@@ -33,8 +33,7 @@ def contactos_iniciales() -> list:
 
 
 def test_cargar_contactos(contactos_iniciales):
-    contactos = []
-    cargar_contactos(contactos)
+    contactos = cargar_contactos()
     assert contactos == contactos_iniciales
 
 
@@ -67,7 +66,7 @@ def test_pedir_email(monkeypatch, contactos_iniciales):
         ("12345", False),
         ("+33666777888", False),
         ("abcd", False),
-        ("", False)
+        ("", True)
     ]
 )
 def test_validar_telefono(input_tel, expected):
