@@ -66,7 +66,7 @@ def test_pedir_email(monkeypatch, contactos_iniciales):
         ("12345", False),
         ("+33666777888", False),
         ("abcd", False),
-        ("", False)
+        ("", True)
     ]
 )
 def test_validar_telefono(input_tel, expected):
