@@ -55,8 +55,8 @@ def borrar_consola():
 def cargar_contactos() -> list:
     """
     Carga los contactos iniciales de la agenda desde un fichero
-    -----------------
-    :return: Lista con cada contacto como diccionario
+
+    :return: lista con cada contacto como diccionario
     """
     contactos = list()
     with open(RUTA_FICHERO, 'r') as fichero:
@@ -90,11 +90,11 @@ def mostrar_menu(contactos: list):
     # """)
 
 
-def pedir_opcion():
+def pedir_opcion() -> int:
     """
     Función que pide al usuario que escoja una opción a emplear en la agenda
-    -----------------------
-    :return: cadena asociada a la opción escogida
+
+    :return int: número asociado a la opción escogida
     """
     opcion = str(input("""    # >> Seleccione una opción:\t """))
     print("    #\n")
@@ -107,6 +107,13 @@ def pedir_opcion():
 
 
 def validar_telefono(telefono: str) -> bool:
+    """
+    Función que se encarga de controlar que el formato del teléfono sea adecuado
+
+    :param telefono: número de teléfono a revisar
+
+    :return bool: devuelve un booleano, devuelve False si entra en las condiciones pertinentes y True si los evita
+    """
     import re
     valido = True
     if re.search("^[+]", telefono) is not None:
@@ -126,6 +133,15 @@ def validar_telefono(telefono: str) -> bool:
 
 
 def validar_email(correo: str, contactos: list, comprobar_dentro: bool) -> bool:
+    """
+    Función que se encarga de controlar que el formato del email sea adecuado
+
+    :param correo: correo a revisar
+    :param contactos: lista con todos los contactos almacenados
+    :param comprobar_dentro: booleano que indica si comprobar que ya exista el correo
+
+    :return bool: devuelve un booleano, devuelve False si entra en las condiciones pertinentes y True si los evita
+    """
     import re
     adecuado = True
     if comprobar_dentro is True:
@@ -155,12 +171,29 @@ def validar_email(correo: str, contactos: list, comprobar_dentro: bool) -> bool:
 
 
 def pedir_email(contactos: list, comprobar_dentro: bool) -> tuple:
+    """
+    Función que se encarga de pedir el email al usuario
+
+    :param contactos: lista con todos los contactos almacenados
+    :param comprobar_dentro: booleano que indica si comprobar que ya exista el correo
+
+    :return tuple (str, bool):
+        devuelve el string del correo y un booleano, el booleano devuelve False tras pasar validar_email() no es
+        adecuado y True si lo es
+    """
     correo = str(input("Introduce un correo\n>\t"))
     adecuado = validar_email(correo, contactos, comprobar_dentro)
     return correo, adecuado
 
 
 def validar_nom_ape(nom_ape: str) -> bool:
+    """
+    Función que se encarga de controlar que el formato de los nombres y apellidos sean adecuados
+
+    :param nom_ape: nombre o apellido a revisar
+
+    :return bool: devuelve un booleano, devuelve False si entra en las condiciones pertinentes y True si los evita
+    """
     import re
     valido = True
     if re.search("[^A-Za-z ]", nom_ape) is not None:
@@ -170,6 +203,13 @@ def validar_nom_ape(nom_ape: str) -> bool:
 
 
 def agregar_contacto(contactos: list) -> dict:
+    """
+    Función que se encarga de crear contactos para la agenda
+
+    :param contactos: lista con todos los contactos de la agenda
+
+    :return dict: devuelve un diccionario, con todos los campos necesarios para añadir un contacto
+    """
     seguir = False
     nombre = str(input("Introduce un nombre (no acentuar)\n>\t"))
     while not seguir:
@@ -214,8 +254,13 @@ def agregar_contacto(contactos: list) -> dict:
 
 
 def eliminar_contacto(contactos: list, email: str) -> list:
-    """ Elimina un contacto de la agenda
-    ...
+    """
+    Elimina un contacto de la agenda
+
+    :param contactos: lista con todos los contactos de la agenda
+    :param email: cadena con el email del contacto que se quiere borrar
+
+    :return list: contactos de la agenda con el contacto correspondiente eliminado
     """
     pos = buscar_contacto(contactos, email)
     if type(pos) is int:
@@ -227,6 +272,14 @@ def eliminar_contacto(contactos: list, email: str) -> list:
 
 
 def buscar_contacto(contactos: list, email: str) -> int or None:
+    """
+    Busca un contacto en la agenda
+
+    :param contactos: lista con todos los contactos de la agenda
+    :param email: cadena con el email del contacto que se quiere buscar
+
+    :return int or None: posición del contacto en la agenda, si no está, devuelve None
+    """
     correos_en_orden = [contacto.get('correo') for contacto in contactos]
     if email not in correos_en_orden:
         posicion_contacto_en_agenda = None
@@ -237,6 +290,15 @@ def buscar_contacto(contactos: list, email: str) -> int or None:
 
 
 def almacenar_por_criterio(contactos: list) -> list:
+    """
+    Función que encarga de devolverte los contactos pertinentes en función del campo por el que busques y del criterio
+    que le indiques
+
+    :param contactos: lista con todos los contactos de la agenda
+
+    :return list: lista con todos los contactos de la agenda que cumplen el criterio
+        que le indiques sobre el campo deseado
+    """
     claves = ['nombre', 'apellido', 'correo', 'telefonos']
     import re
     clave = ""
@@ -276,6 +338,11 @@ def almacenar_por_criterio(contactos: list) -> list:
 
 
 def presentar_contactos(contactos: list):
+    """
+    Función que imprime de la manera deseada la lista de contactos que le indiques
+
+    :param contactos: lista con los contactos
+    """
     import re
     if len(contactos) == 0:
         print("(No hay contactos)\n")
@@ -303,8 +370,14 @@ def presentar_contactos(contactos: list):
 
 
 def agenda(contactos: list) -> list:
-    """ Ejecuta el menú de la agenda con varias opciones
-    ...
+    """
+    Bucle principal del programa. Ejecuta el menú de la agenda con varias opciones, según la opción elegida, se lleva
+    a cabo esa función. Cuando se indique la opción de salir, se saldrá del bucle principal para terminar el programa
+
+    :param contactos: lista con todos los contactos iniciales de la hoja de contactos
+
+    :return list: devuelve la lista de contactos con los cambios que se le hayan realizado a lo largo de la
+        ejecución del bucle principal
     """
     opcion = 0
     while opcion != 8:
@@ -374,14 +447,16 @@ def agenda(contactos: list) -> list:
 
 
 def pulse_tecla_para_continuar():
-    """ Muestra un mensaje y realiza una pausa hasta que se pulse una tecla
+    """
+    Muestra un mensaje y realiza una pausa hasta que se pulse una tecla
     """
     print("Pulse cualquier tecla para continuar\n")
     os.system("pause")
 
 
 def main():
-    """ Función principal del programa
+    """
+    Función principal del programa
     """
     borrar_consola()
     contactos = cargar_contactos()
