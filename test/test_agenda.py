@@ -33,8 +33,7 @@ def contactos_iniciales() -> list:
 
 
 def test_cargar_contactos(contactos_iniciales):
-    contactos = []
-    cargar_contactos(contactos)
+    contactos = cargar_contactos()
     assert contactos == contactos_iniciales
 
 
